@@ -1,0 +1,36 @@
+  @foreach (var s in ViewBag.Shindig)
+    {
+        <tr>
+            <td>@s.participants's Shindig</td>
+            <td>@s.ShindigDate.ToString("MMMM dd, yyyy")</td>
+            <td>@s.Shindig.Count</td>
+            <td>
+                @{
+                    bool isGoing = false;
+                    foreach(var participants in s.Shindig)
+                    {
+                        if(participants.UserId == ViewBag.User.UserId)
+                        {
+                            isGoing = true;
+                            break;
+                        }
+                    }
+                    if(s.PlannerId == ViewBag.User.UserId)
+                    {
+                        <form action="/delete/@s.ShindigId" method="post">
+                            <input type="submit" value="Delete" class="btn btn-danger btn-xs" />
+                        </form>
+                    }
+                    else if(isGoing)
+                    {
+                        <a href="/leave/@s.ShindigId" class="btn btn-warning btn-xs">Un-RSVP</a> 
+                    }
+                    else
+                    {
+                        <a href="/join/@s.ShindigId" class="btn btn-primary btn-xs">RSVP</a>   
+                    }
+                }
+            </td>
+        </tr>
+    }
+</table>

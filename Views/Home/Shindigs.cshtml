@@ -1,0 +1,67 @@
+</h1><a href="/logout">Logout</a>
+<div class="jumbotron">
+
+<h1>Welcome @ViewBag.User.Name!
+</div>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Activity</th>
+        <th>Date and Time</th>
+        <th>Duration</th>
+        <th>Event Coordinator</th>
+        <th>No. of Participants</th>
+        <th>Actions</th>
+    </tr>
+    
+    
+    @foreach(var s in ViewBag.Shindigs)
+    {
+    
+        <tr>
+            <td><a href="/shindig/@s.ShindigId">@s.Title</td>
+            <td>@s.ShindigDate.ToString("MM/dd") @@ @s.ShindigTime.ToString("HH:mm") </td>
+            
+            <td>@s.Duration</td>
+            <td>@s.PlannerId.ToString("name")</td>
+            <td>
+                @s.Shindigname.Count
+            </td>
+            <td>
+                @{
+                    
+                    bool attending = false;
+                    foreach(var Shindig in ViewBag.Participant)
+                    {
+                        if(Shindig.ShindigId == s.ShindigId)
+                        {
+                            
+                            if (ViewBag.User.UserId == Shindig.UserId){
+                            attending = true;
+            }
+                        }
+                        
+                    }
+                    
+                    if(s.PlannerId == ViewBag.User.UserId)
+                    {
+        
+                    <form action="/delete/@s.ShindigId" method="post">
+                            <input type="submit" value="Delete" class="btn btn-danger btn-xs" />
+                        </form>
+                    }
+                    else if(attending)
+                    {
+                        <a href="/leave/@s.ShindigId" class="btn btn-warning btn-xs">leave</a> 
+                    }
+                    else
+                    {
+                        <a href="/join/@s.ShindigId" class="btn btn-primary btn-xs">join</a>   
+                    }
+                }
+                </td>
+        </tr>  
+}
+</table>
+
+<a class="btn btn-primary btn-s" href="new">Add New Shindig</a>
